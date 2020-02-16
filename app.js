@@ -1,61 +1,56 @@
 const sectionItems = document.querySelectorAll("section");
 
-sectionItems.forEach( function(item) { 
-    let listItem = document.createElement("li");
-    let itemLink = document.createElement("a"); 
-    itemLink.textContent = item.firstElementChild.innerHTML;
-    itemLink.className = "nav-item";
-    document.getElementById("navbar").appendChild(listItem).appendChild(itemLink);
-});
-
-sectionItems.forEach( function(item) { 
-    let listItem = document.createElement("li");
-    let itemLink = document.createElement("a"); 
-    itemLink.className = "nav-item";
-    itemLink.textContent = item.firstElementChild.innerHTML;
-    document.getElementById("bubble-menu").appendChild(listItem).appendChild(itemLink);
-});
-
-
-const navItems = document.querySelectorAll(".nav-item");
-
-navItems.forEach(function(item){
-    item.addEventListener("click", function(e){
-        e.preventDefault();
-        const targetId = e.target.innerHTML.toLowerCase();
-        const targetSection = document.getElementById(targetId);
-
-        //Scroll target section (#link) intoview
-        targetSection.scrollIntoView( { behavior: 'smooth', block: 'center' } );
-        
-        //Remove class from active class from navItems
-        // navItems.forEach(function(item){
-        //     if (item.classList.contains("active")) {
-        //         item.classList.toggle("active");
-        //     } 
-
-        //     // Add classname to .nav-item with that link to same section
-        //     if (targetId == item.innerHTML.toLowerCase()) {
-        //         item.classList.add("active");
-        //     }
-        // });
-
-        // Add classname .active to clicked element
-        // e.target.classList.add("active");
-    });
-});
-
 document.addEventListener("DOMContentLoaded", function() {
     let options = {
         threshold: 0.75
     }
 
     let observer = new IntersectionObserver(sectionInViewport, options);
+    
     sectionItems.forEach(function(section) {
         observer.observe(section);
         // console.log(section.id);
     });
 });
+
+sectionItems.forEach( function(item) { 
+    // Create list items with nested a for top Meny
+    let listItem = document.createElement("li");
+    let itemLink = document.createElement("a"); 
+
+    // Create list items with nested a for bubble meny
+    let bubbleItem = document.createElement("li");
+    let bubbleLink = document.createElement("a"); 
+
+    // Get text for link from section H2 (first child)
+    itemLink.textContent = item.id;
+    bubbleLink.textContent = item.id;
+
+    // Add same class for all links
+    itemLink.className = "nav-item";
+    bubbleLink.className = "nav-item";
+
+    // Append links for top Meny and bubble Meny
+    document.getElementById("navbar").appendChild(listItem).appendChild(itemLink);
+    document.getElementById("bubble-menu").appendChild(bubbleItem).appendChild(bubbleLink);
+});
+
+const navItems = document.querySelectorAll(".nav-item");
+
+navItems.forEach(function(item){
+    item.addEventListener("click", function(e){
+        e.preventDefault();
+        //Get innerHTML of navItems (a text)
+        const targetId = e.target.innerHTML.toLowerCase();
+
+        //Add targetID of navItem (section id that will be scrolled to)
+        const targetSection = document.getElementById(targetId);
+
+        //Scroll target section (#link) into view
+        targetSection.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+    });
+});
+
 
 function sectionInViewport(entries) {
     entries.forEach(function (entry) {
@@ -67,7 +62,6 @@ function sectionInViewport(entries) {
                     item.classList.remove("active");
                 }
             });
-
         }
     });
 };
@@ -82,4 +76,3 @@ function myFunction() {
 window.onscroll = function() {
     myFunction()
 };
-
